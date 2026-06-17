@@ -4,13 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAddress, isHex } from "viem";
 import { hardhat } from "viem/chains";
-import { usePublicClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 
 export const SearchBar = () => {
   const [searchInput, setSearchInput] = useState("");
   const router = useRouter();
 
   const client = usePublicClient({ chainId: hardhat.id });
+  const { address } = useAccount();
 
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -41,9 +42,20 @@ export const SearchBar = () => {
         placeholder="Search by hash or address"
         onChange={e => setSearchInput(e.target.value)}
       />
-      <button className="btn btn-sm btn-primary" type="submit">
-        Search
-      </button>
+      <div className="flex gap-2">
+        <button className="btn btn-sm btn-primary" type="submit">
+          Search
+        </button>
+        {address && (
+          <button
+            className="btn btn-sm btn-secondary"
+            type="button"
+            onClick={() => router.push(`/blockexplorer/address/${address}`)}
+          >
+            My Transactions
+          </button>
+        )}
+      </div>
     </form>
   );
 };

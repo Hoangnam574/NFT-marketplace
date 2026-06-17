@@ -57,5 +57,8 @@
   "packageManager": "yarn@4.13.0",
   "engines": {
     "node": ">=22.10.0"
+  },
+  "resolutions": {
+    "@scaffold-ui/debug-contracts": "patch:@scaffold-ui/debug-contracts@npm:0.1.11#./.yarn/patches/@scaffold-ui-debug-contracts-npm-0.1.11-d32700232a.patch"
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ContractUI } from "./ContractUI";
 import "@scaffold-ui/debug-contracts/styles.css";
 import { useSessionStorage } from "usehooks-ts";
@@ -11,6 +11,9 @@ import { useAllContracts } from "~~/utils/scaffold-eth/contractsData";
 const selectedContractStorageKey = "scaffoldEth2.selectedContract";
 
 export function DebugContracts() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const contractsData = useAllContracts();
   const contractNames = useMemo(
     () =>
@@ -31,6 +34,8 @@ export function DebugContracts() {
       setSelectedContract(contractNames[0]);
     }
   }, [contractNames, selectedContract, setSelectedContract]);
+
+  if (!mounted) return null;
 
   return (
     <div className="flex flex-col gap-y-6 lg:gap-y-8 py-8 lg:py-12 justify-center items-center">
