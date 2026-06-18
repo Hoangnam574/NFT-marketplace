@@ -15,7 +15,7 @@ import {
   EyeIcon,
   QrCodeIcon,
 } from "@heroicons/react/24/outline";
-import { BlockieAvatar } from "~~/components/scaffold-eth";
+import { BlockieAvatar, FaucetButton } from "~~/components/scaffold-eth";
 import { useCopyToClipboard, useOutsideClick } from "~~/hooks/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { getTargetNetworks } from "~~/utils/scaffold-eth";
@@ -105,6 +105,11 @@ export const AddressInfoDropdown = ({
               </Link>
             </button>
           </li>
+          {isLocalNetwork ? (
+            <li className={selectingNetwork ? "hidden" : ""}>
+              <FaucetButton />
+            </li>
+          ) : null}
           {allowedNetworks.length > 1 ? (
             <li className={selectingNetwork ? "hidden" : ""}>
               <button

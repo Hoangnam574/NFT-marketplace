@@ -12,14 +12,15 @@ interface NFTCardProps {
     seller?: string;
     owner?: string;
   };
-  onAction?: () => void;
-  actionText?: string;
-  isPending?: boolean;
+  onClick?: () => void;
 }
 
-export const NFTCard = ({ nft, onAction, actionText, isPending }: NFTCardProps) => {
+export const NFTCard = ({ nft, onClick }: NFTCardProps) => {
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-300">
+    <div
+      className={`card bg-base-100 shadow-xl border border-base-300 ${onClick ? "cursor-pointer hover:scale-[1.02] transition-transform" : ""}`}
+      onClick={onClick}
+    >
       <figure className="relative h-64 w-full">
         <Image src={nft.image} alt={nft.name} fill className="object-cover" />
       </figure>
@@ -44,14 +45,6 @@ export const NFTCard = ({ nft, onAction, actionText, isPending }: NFTCardProps) 
         {nft.owner && (
           <div className="mt-2 text-sm">
             Owner: <Address address={nft.owner} />
-          </div>
-        )}
-
-        {onAction && actionText && (
-          <div className="card-actions justify-end mt-4">
-            <button className="btn btn-primary w-full" onClick={onAction} disabled={isPending}>
-              {isPending ? <span className="loading loading-spinner"></span> : actionText}
-            </button>
           </div>
         )}
       </div>

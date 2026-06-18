@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @dev NFT Marketplace for listing and buying NFTs
  */
 contract Marketplace is ReentrancyGuard, Ownable {
-    uint256 public feePercentage = 1; // 1% fee
+    uint256 public feeBasisPoints = 250; // 2.5% fee (250 / 10000)
 
     struct Listing {
         address seller;
@@ -28,12 +28,12 @@ contract Marketplace is ReentrancyGuard, Ownable {
     constructor(address initialOwner) Ownable(initialOwner) {}
 
     /**
-     * @dev Sets a new fee percentage
-     * @param _newFee The new fee percentage (e.g., 1 for 1%)
+     * @dev Sets a new fee in basis points
+     * @param _newFeeBP The new fee in basis points (e.g., 250 for 2.5%)
      */
-    function setFeePercentage(uint256 _newFee) external onlyOwner {
-        require(_newFee <= 10, "Fee too high"); // Max 10%
-        feePercentage = _newFee;
+    function setFeeBasisPoints(uint256 _newFeeBP) external onlyOwner {
+        require(_newFeeBP <= 1000, "Fee too high"); // Max 10% (1000 BP)
+        feeBasisPoints = _newFeeBP;
     }
 
     /**
@@ -71,7 +71,7 @@ contract Marketplace is ReentrancyGuard, Ownable {
         listings[nftContract][tokenId].active = false; // Mark as inactive
 
         // Calculate fee
-        uint256 feeAmount = (listing.price * feePercentage) / 100;
+        uint256 feeAmount = (listing.price * feeBasisPoints) / 10000;
         uint256 sellerAmount = listing.price - feeAmount;
 
         // Transfer funds to seller

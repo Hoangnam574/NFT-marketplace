@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     Marketplace: {
-      address: "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0",
+      address: "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
       abi: [
         {
           inputs: [
@@ -191,7 +191,7 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "feePercentage",
+          name: "feeBasisPoints",
           outputs: [
             {
               internalType: "uint256",
@@ -283,11 +283,11 @@ const deployedContracts = {
           inputs: [
             {
               internalType: "uint256",
-              name: "_newFee",
+              name: "_newFeeBP",
               type: "uint256",
             },
           ],
-          name: "setFeePercentage",
+          name: "setFeeBasisPoints",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -318,10 +318,10 @@ const deployedContracts = {
         renounceOwnership: "npm/@openzeppelin/contracts@5.6.1/access/Ownable.sol",
         transferOwnership: "npm/@openzeppelin/contracts@5.6.1/access/Ownable.sol",
       },
-      deployedOnBlock: 3,
+      deployedOnBlock: 2,
     },
     MyNFT: {
-      address: "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      address: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
       abi: [
         {
           inputs: [
@@ -719,6 +719,24 @@ const deployedContracts = {
               type: "address",
             },
             {
+              internalType: "string[]",
+              name: "_tokenURIs",
+              type: "string[]",
+            },
+          ],
+          name: "mintBatch",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "recipient",
+              type: "address",
+            },
+            {
               internalType: "string",
               name: "_tokenURI",
               type: "string",
@@ -1020,150 +1038,6 @@ const deployedContracts = {
         renounceOwnership: "npm/@openzeppelin/contracts@5.6.1/access/Ownable.sol",
         transferOwnership: "npm/@openzeppelin/contracts@5.6.1/access/Ownable.sol",
       },
-      deployedOnBlock: 4,
-    },
-    YourContract: {
-      address: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
-      abi: [
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_owner",
-              type: "address",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "address",
-              name: "greetingSetter",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "newGreeting",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "premium",
-              type: "bool",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-          ],
-          name: "GreetingChange",
-          type: "event",
-        },
-        {
-          inputs: [],
-          name: "greeting",
-          outputs: [
-            {
-              internalType: "string",
-              name: "",
-              type: "string",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "owner",
-          outputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "premium",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "string",
-              name: "_newGreeting",
-              type: "string",
-            },
-          ],
-          name: "setGreeting",
-          outputs: [],
-          stateMutability: "payable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "totalCounter",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-          ],
-          name: "userGreetingCounter",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "withdraw",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          stateMutability: "payable",
-          type: "receive",
-        },
-      ],
-      inheritedFunctions: {},
       deployedOnBlock: 1,
     },
   },

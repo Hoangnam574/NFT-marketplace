@@ -38,7 +38,7 @@ const scaffoldConfig = {
   // - "localNetworksOnly": only show when all target networks are local (hardhat/anvil)
   // - "allNetworks": show on any configured target networks
   // - "disabled": completely disable
-  burnerWalletMode: "localNetworksOnly",
+  burnerWalletMode: "disabled",
 } as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;

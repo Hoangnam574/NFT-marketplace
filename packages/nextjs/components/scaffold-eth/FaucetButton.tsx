@@ -9,7 +9,7 @@ import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 
 // Number of ETH faucet sends to an address
-const NUM_OF_ETH = "1";
+const NUM_OF_ETH = "1000";
 const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 
 const localWalletClient = createWalletClient({
@@ -53,21 +53,18 @@ export const FaucetButton = () => {
   const isBalanceZero = balance && balance.value === 0n;
 
   return (
-    <div
-      className={
-        !isBalanceZero
-          ? "ml-1"
-          : "ml-1 tooltip tooltip-bottom tooltip-primary tooltip-open font-bold before:left-auto before:right-0 before:transform-none before:translate-none before:content-[attr(data-tip)]"
-      }
-      data-tip="Grab funds from faucet"
+    <button
+      className="h-8 btn-sm rounded-xl! flex gap-3 py-3 font-normal"
+      type="button"
+      onClick={sendETH}
+      disabled={loading}
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
-        {!loading ? (
-          <BanknotesIcon className="h-4 w-4" />
-        ) : (
-          <span className="loading loading-spinner loading-xs"></span>
-        )}
-      </button>
-    </div>
+      {!loading ? (
+        <BanknotesIcon className="h-6 w-4 ml-2 sm:ml-0" />
+      ) : (
+        <span className="loading loading-spinner loading-xs h-6 w-4 ml-2 sm:ml-0"></span>
+      )}
+      <span className="whitespace-nowrap">Grab funds from faucet</span>
+    </button>
   );
 };

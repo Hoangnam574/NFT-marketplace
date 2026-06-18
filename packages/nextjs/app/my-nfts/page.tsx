@@ -134,50 +134,69 @@ export default function MyNFTsPage() {
       ) : nfts.length === 0 ? (
         <p>You don&apos;t own any NFTs yet.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-[100rem]">
           {nfts.map(nft => (
-            <NFTCard
-              key={nft.tokenId}
-              nft={nft}
-              actionText="List for Sale"
-              onAction={() => setSelectedTokenId(nft.tokenId)}
-            />
+            <NFTCard key={nft.tokenId} nft={nft} onClick={() => setSelectedTokenId(nft.tokenId)} />
           ))}
         </div>
       )}
 
-      {/* List Modal */}
-      {selectedTokenId && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">List NFT #{selectedTokenId} for Sale</h3>
-            <div className="py-4">
-              <label className="label">
-                <span className="label-text">Price in ETH</span>
-              </label>
-              <input
-                type="number"
-                placeholder="0.01"
-                className="input input-bordered w-full"
-                value={listPrice}
-                onChange={e => setListPrice(e.target.value)}
-              />
+      {/* Detail / List Modal */}
+      {selectedTokenId &&
+        (() => {
+          const selectedNft = nfts.find(n => n.tokenId === selectedTokenId);
+          if (!selectedNft) return null;
+          return (
+            <div className="modal modal-open">
+              <div className="modal-box max-w-5xl">
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="w-full md:w-1/2 relative h-[32rem] rounded-xl overflow-hidden bg-base-200">
+                    <img
+                      src={selectedNft.image}
+                      alt={selectedNft.name}
+                      className="object-contain w-full h-full absolute inset-0"
+                    />
+                  </div>
+                  <div className="w-full md:w-1/2 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-bold text-2xl">
+                        {selectedNft.name} #{selectedNft.tokenId}
+                      </h3>
+                      <p className="py-4 text-sm opacity-80">{selectedNft.description}</p>
+
+                      <div className="form-control w-full">
+                        <label className="label">
+                          <span className="label-text text-sm font-semibold">List Price (ETH)</span>
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="0.01"
+                          className="input input-bordered w-full"
+                          value={listPrice}
+                          onChange={e => setListPrice(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="modal-action mt-6">
+                      <button className="btn" onClick={() => setSelectedTokenId(null)}>
+                        Close
+                      </button>
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleListForSale}
+                        disabled={isApproving || isListing || !listPrice}
+                      >
+                        {isApproving || isListing ? <span className="loading loading-spinner"></span> : "List for Sale"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="modal-backdrop" onClick={() => setSelectedTokenId(null)}></div>
             </div>
-            <div className="modal-action">
-              <button className="btn" onClick={() => setSelectedTokenId(null)}>
-                Cancel
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={handleListForSale}
-                disabled={isApproving || isListing || !listPrice}
-              >
-                {isApproving || isListing ? <span className="loading loading-spinner"></span> : "Confirm Listing"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+          );
+        })()}
     </div>
   );
 }

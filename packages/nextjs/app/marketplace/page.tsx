@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Address } from "@scaffold-ui/components";
+import { formatEther } from "viem";
 import { useAccount, useReadContracts } from "wagmi";
 import { NFTCard } from "~~/components/NFTCard";
 import { useDeployedContractInfo, useScaffoldEventHistory, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -11,6 +13,7 @@ export default function MarketplacePage() {
   const { address } = useAccount();
   const [activeListings, setActiveListings] = useState<any[]>([]);
   const [loadingMetadata, setLoadingMetadata] = useState(false);
+  const [selectedListing, setSelectedListing] = useState<any>(null);
 
   const { data: marketplaceContractData } = useDeployedContractInfo({ contractName: "Marketplace" });
   const { data: myNftContractData } = useDeployedContractInfo({ contractName: "MyNFT" });
@@ -148,7 +151,7 @@ export default function MarketplacePage() {
       ) : activeListings.length === 0 ? (
         <p>No NFTs are currently listed for sale.</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-[100rem]">
           {activeListings.map(listing => (
             <NFTCard
               key={`${listing.nftContract}-${listing.tokenId}`}
@@ -160,15 +163,59 @@ export default function MarketplacePage() {
                 price: listing.price,
                 seller: listing.seller,
               }}
-              actionText={listing.seller === address ? "Your Listing" : "Buy NFT"}
-              onAction={
-                listing.seller === address
-                  ? undefined
-                  : () => handleBuy(listing.nftContract, listing.tokenId, listing.price)
-              }
-              isPending={isBuying}
+              onClick={() => setSelectedListing(listing)}
             />
           ))}
+        </div>
+      )}
+
+      {/* Detail / Buy Modal */}
+      {selectedListing && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-5xl">
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="w-full md:w-1/2 relative h-[32rem] rounded-xl overflow-hidden bg-base-200">
+                <img
+                  src={selectedListing.image}
+                  alt={selectedListing.name}
+                  className="object-contain w-full h-full absolute inset-0"
+                />
+              </div>
+              <div className="w-full md:w-1/2 flex flex-col justify-between">
+                <div>
+                  <h3 className="font-bold text-2xl">
+                    {selectedListing.name} #{selectedListing.tokenId}
+                  </h3>
+                  <p className="py-4 text-sm opacity-80">{selectedListing.description}</p>
+                  <p className="text-xl font-bold mb-2">Price: {formatEther(selectedListing.price)} ETH</p>
+                  <div className="text-sm">
+                    Seller: <Address address={selectedListing.seller} />
+                  </div>
+                </div>
+
+                <div className="modal-action mt-6">
+                  <button className="btn" onClick={() => setSelectedListing(null)}>
+                    Close
+                  </button>
+                  {selectedListing.seller !== address ? (
+                    <button
+                      className="btn btn-primary"
+                      onClick={async () => {
+                        await handleBuy(selectedListing.nftContract, selectedListing.tokenId, selectedListing.price);
+                        setSelectedListing(null);
+                      }}
+                      disabled={isBuying}
+                    >
+                      {isBuying ? <span className="loading loading-spinner"></span> : "Buy NFT"}
+                    </button>
+                  ) : (
+                    <button className="btn btn-disabled">Your Listing</button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modal-backdrop" onClick={() => setSelectedListing(null)}></div>
         </div>
       )}
     </div>
